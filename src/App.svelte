@@ -16,17 +16,18 @@ import { onMount } from "svelte";
 	const loadCoins = async () => {
 		const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false')
 		const data = await res.json()
-		console.log(data);
+		coins = data;
 		filteredCoins = data;
 	}
 
-loadCoins()
+	loadCoins()
 
-const searchCoin = (value) => {
-	filteredCoins = coins.filter((coin) =>
-		coin.name.toLowerCase().includes(value.toLowerCase())) ||
-		coin.symbol.toLowerCase().includes(value.toLowerCase());
-};
+	const searchCoin = (value) => {
+		filteredCoins = coins.filter((coin) =>
+			coin.name.toLowerCase().includes(value.toLowerCase()) ||
+			coin.symbol.toLowerCase().includes(value.toLowerCase())
+		)
+	};
 
 	onMount(() => {
 		ref.focus()
@@ -45,7 +46,7 @@ const searchCoin = (value) => {
 				type="text" 
 				class="form-control bg-dark text-white rounded-0 border-0 my-4"
 				placeholder="Search crypto"
-				on:keyup={({target: {value}}) => searchCoin(value)}
+				on:keyup={({target: {value} }) => searchCoin(value)}
 				bind:this={ref}
 			/>
 
